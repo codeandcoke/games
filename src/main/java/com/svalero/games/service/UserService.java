@@ -23,11 +23,12 @@ public class UserService {
     }
 
     public List<User> findAll() {
-        return null;
+        return userRepository.findAll();
     }
 
     public User findById(long id) throws UserNotFoundException {
-        return null;
+        return userRepository.findById(id)
+                .orElseThrow(UserNotFoundException::new);
     }
 
     public User modify(long id, User user) throws UserNotFoundException {

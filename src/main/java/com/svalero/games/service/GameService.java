@@ -3,6 +3,7 @@ package com.svalero.games.service;
 import com.svalero.games.domain.Game;
 import com.svalero.games.exception.GameNotFoundException;
 import com.svalero.games.repository.GameRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,8 @@ public class GameService {
 
     @Autowired
     private GameRepository gameRepository;
+    @Autowired
+    private ModelMapper modelMapper;
 
     public Game add(Game game) {
         return gameRepository.save(game);
@@ -39,17 +42,12 @@ public class GameService {
     }
 
     public Game modify(long id, Game game) throws GameNotFoundException {
-        Game oldGame = gameRepository.findById(id)
+        Game existingGame = gameRepository.findById(id)
                 .orElseThrow(GameNotFoundException::new);
 
-        // TODO Más adelante usaremos ModelMapper para mapear atributos entre objetos
-        oldGame.setName(game.getName());
-        oldGame.setType(game.getType());
-        oldGame.setPrice(game.getPrice());
-        oldGame.setDescription(game.getDescription());
-        oldGame.setReleaseDate(game.getReleaseDate());
-        oldGame.setCategory(game.getCategory());
+        modelMapper.map(game, existingGame);
+        existingGame.setId(id);
 
-        return gameRepository.save(oldGame);
+        return gameRepository.save(existingGame);
     }
 }

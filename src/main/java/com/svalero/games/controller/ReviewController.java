@@ -44,9 +44,10 @@ public class ReviewController {
             throws GameNotFoundException, UserNotFoundException{
         // TODO Añadir validación
         Game game = gameService.findById(reviewInDto.getGameId());
-//        User user = userService.findById(reviewInDto.getUserId());
-        reviewService.add(reviewInDto, game, null);
-        return null;
+        User user = userService.findById(reviewInDto.getUserId());
+        Review review = reviewService.add(reviewInDto, game, user);
+        // TODO Devolver un objeto ReviewOutDto
+        return ResponseEntity.ok(review);
     }
 
     @PutMapping("/reviews/{id}")
@@ -61,9 +62,13 @@ public class ReviewController {
 
     @ExceptionHandler(ReviewNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleException(ReviewNotFoundException rnfe) {
-        ErrorResponse errorResponse = new ErrorResponse(404, "not-found", "The review does not exist");
+        ErrorResponse errorResponse = ErrorResponse.notFound("The review does not exist");
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
-
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleException(UserNotFoundException unfe) {
+        ErrorResponse errorResponse = ErrorResponse.notFound("The user does not exist");
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
 }

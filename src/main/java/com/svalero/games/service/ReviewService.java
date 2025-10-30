@@ -6,6 +6,7 @@ import com.svalero.games.domain.User;
 import com.svalero.games.dto.ReviewInDto;
 import com.svalero.games.exception.ReviewNotFoundException;
 import com.svalero.games.repository.ReviewRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,16 +17,14 @@ public class ReviewService {
 
     @Autowired
     private ReviewRepository reviewRepository;
+    @Autowired
+    private ModelMapper modelMapper;
 
     public Review add(ReviewInDto reviewInDto, Game game, User user) {
-        // TODO Usar ModelMapper
         Review review = new Review();
         review.setGame(game);
-        // FIXME Añadir operación para registrar usuario
-//        review.setUser(user);
-        review.setDescription(reviewInDto.getDescription());
-        review.setRate(reviewInDto.getRate());
-        review.setPlayDate(reviewInDto.getPlayDate());
+        review.setUser(user);
+        modelMapper.map(reviewInDto, review);
 
         return reviewRepository.save(review);
     }
