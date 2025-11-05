@@ -1,0 +1,187 @@
+openapi: 3.0.1
+info:
+  title: games
+  description: API sobre videojuegos
+  version: 1.0.0
+servers:
+  - url: 'https://www.games.com'
+paths:
+  /games:
+    get:
+      summary: Devuelve la lista de juegos
+      description: |
+        Devuelve una lista con todos los juegos disponibles
+      
+        Se permite filtrar juegos por dos campos al mismo tiempo:
+          - **category**: Filtra por categoria
+          - **type**: Filtra por tipo
+      parameters:
+        - name: category
+          in: query
+          description: Filtra por categoria del juego
+          required: false
+          schema:
+            type: string
+        - name: type
+          in: query
+          description: Filtra por tipo de juego
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GameOutDto'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+    post:
+      summary: Registrar un juego
+      description: Registra un nuevo juego
+      requestBody:
+        description: Los datos del nuevo juego
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GameInDto'
+      responses:
+        '201':
+          description: Juego registrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Game'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Conflict'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+components:
+  schemas:
+    Game:
+      allOf:
+        - $ref: '#/components/schemas/GameInDto'
+      type: object
+      properties:
+        id:
+          type: number
+          format: int64
+          description: Identificador unico del juego
+      example:
+        id: 1
+        name: 7 Days to die
+        description: Surival game
+        type: Shooter
+        releaseDate: 2020-01-12
+        price: 45
+        category: Survival
+    GameInDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Nombre del juego
+        description:
+          type: string
+          description: Descripción del juego
+        type:
+          type: string
+          description: Tipo de juego
+        category:
+          type: string
+          description: Categoría del juego
+        releaseDate:
+          type: string
+          format: date
+          description: Fecha de lanzamiento del juego
+        price:
+          type: number
+          format: float
+          description: Precio aproximado del juego
+      example:
+        name: 7 Days to die
+        description: Surival game
+        type: Shooter
+        releaseDate: 2020-01-12
+        price: 45
+        category: Survival
+    GameOutDto:
+      type: object
+      properties:
+        id:
+          type: number
+          format: int64
+          description: Identificador del juego
+        name:
+          type: string
+          description: Nombre del juego
+        description:
+          type: string
+          description: Descripción del juego
+        type:
+          type: string
+          description: Tipo de juego
+        category:
+          type: string
+          description: Categoría del juego
+      example:
+        id: 1
+        name: 7 Days to die
+        description: Surival game
+        type: Shooter
+        category: Survival
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: number
+          format: int
+          description: Codigo de estado
+        message:
+          type: string
+          description: Mensaje de error
+        title:
+          type: string
+          description: Tipo de error
+    InternalServerError:
+      allOf:
+        - $ref: '#/components/schemas/ErrorResponse'
+      example:
+        code: 500
+        message: Internal server error
+        title: internal-server-error
+    BadRequest:
+      allOf:
+        - $ref: '#/components/schemas/ErrorResponse'
+      example:
+        code: 400
+        message: Validation error
+        title: bad-request
+    Conflict:
+      allOf:
+        - $ref: '#/components/schemas/ErrorResponse'
+      example:
+        code: 409
+        message: Conflict
+        title: conflict
