@@ -1,6 +1,7 @@
 package com.svalero.games.controller;
 
 import com.svalero.games.domain.Game;
+import com.svalero.games.dto.GameDto;
 import com.svalero.games.dto.GameOutDto;
 import com.svalero.games.exception.ErrorResponse;
 import com.svalero.games.exception.GameNotFoundException;
@@ -29,21 +30,14 @@ public class GameController {
 
     @GetMapping("/games")
     public ResponseEntity<List<GameOutDto>> getAll(@RequestParam(value = "category", defaultValue = "") String category) {
-        List<Game> games;
-        if (!category.isEmpty()) {
-            games = gameService.findByCategory(category);
-        } else {
-            games = gameService.findAll();
-        }
-
-        List<GameOutDto> gamesOutDto = modelMapper.map(games, new TypeToken<List<GameOutDto>>() {}.getType());
+        List<GameOutDto> gamesOutDto = gameService.findAll(category);
         return ResponseEntity.ok(gamesOutDto);
     }
 
     @GetMapping("/games/{id}")
-    public ResponseEntity<Game> get(@PathVariable long id) throws GameNotFoundException {
-        Game game = gameService.findById(id);
-        return ResponseEntity.ok(game);
+    public ResponseEntity<GameDto> get(@PathVariable long id) throws GameNotFoundException {
+        GameDto gameDto = gameService.findById(id);
+        return ResponseEntity.ok(gameDto);
     }
 
     @PostMapping("/games")

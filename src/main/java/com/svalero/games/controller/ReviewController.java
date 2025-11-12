@@ -3,6 +3,7 @@ package com.svalero.games.controller;
 import com.svalero.games.domain.Game;
 import com.svalero.games.domain.Review;
 import com.svalero.games.domain.User;
+import com.svalero.games.dto.GameDto;
 import com.svalero.games.dto.ReviewInDto;
 import com.svalero.games.exception.ErrorResponse;
 import com.svalero.games.exception.GameNotFoundException;
@@ -43,9 +44,9 @@ public class ReviewController {
     public ResponseEntity<Review> addReview(@RequestBody ReviewInDto reviewInDto)
             throws GameNotFoundException, UserNotFoundException{
         // TODO Añadir validación
-        Game game = gameService.findById(reviewInDto.getGameId());
+        GameDto gameDto = gameService.findById(reviewInDto.getGameId());
         User user = userService.findById(reviewInDto.getUserId());
-        Review review = reviewService.add(reviewInDto, game, user);
+        Review review = reviewService.add(reviewInDto, gameDto, user);
         // TODO Devolver un objeto ReviewOutDto
         return ResponseEntity.ok(review);
     }
