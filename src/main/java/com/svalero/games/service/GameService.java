@@ -1,12 +1,17 @@
 package com.svalero.games.service;
 
 import com.svalero.games.domain.Game;
+import com.svalero.games.dto.GameDto;
+import com.svalero.games.dto.GameOutDto;
 import com.svalero.games.exception.GameNotFoundException;
 import com.svalero.games.repository.GameRepository;
+import com.svalero.games.util.DateUtil;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -28,17 +33,25 @@ public class GameService {
         gameRepository.delete(game);
     }
 
-    public List<Game> findAll() {
-        return gameRepository.findAll();
+    public List<GameOutDto> findAll(String category) {
+        List<Game> games;
+
+        if (!category.isEmpty()) {
+            games = gameRepository.findByCategory(category);
+        } else {
+            games = gameRepository.findAll();
+        }
+
+        return modelMapper.map(games, new TypeToken<List<GameOutDto>>() {}.getType());
     }
 
-    public List<Game> findByCategory(String category) {
-        return gameRepository.findByCategory(category);
-    }
-
-    public Game findById(long id) throws GameNotFoundException {
-        return gameRepository.findById(id)
+    public GameDto findById(long id) throws GameNotFoundException {
+        Game game = gameRepository.findById(id)
                 .orElseThrow(GameNotFoundException::new);
+
+        GameDto gameDto = modelMapper.map(game, GameDto.class);
+        gameDto.setDaysToRelease(DateUtil.getDaysBetweenDates(LocalDate.now(), gameDto.getReleaseDate()));
+        return gameDto;
     }
 
     public Game modify(long id, Game game) throws GameNotFoundException {

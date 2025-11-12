@@ -3,8 +3,10 @@ package com.svalero.games.service;
 import com.svalero.games.domain.Game;
 import com.svalero.games.domain.Review;
 import com.svalero.games.domain.User;
+import com.svalero.games.dto.GameDto;
 import com.svalero.games.dto.ReviewInDto;
 import com.svalero.games.exception.ReviewNotFoundException;
+import com.svalero.games.repository.GameRepository;
 import com.svalero.games.repository.ReviewRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +20,14 @@ public class ReviewService {
     @Autowired
     private ReviewRepository reviewRepository;
     @Autowired
+    private GameRepository gameRepository;
+    @Autowired
     private ModelMapper modelMapper;
 
-    public Review add(ReviewInDto reviewInDto, Game game, User user) {
+    public Review add(ReviewInDto reviewInDto, GameDto gameDto, User user) {
         Review review = new Review();
-        review.setGame(game);
+        // FIXME Mejorar
+        review.setGame(gameRepository.findById(gameDto.getId()).get());
         review.setUser(user);
         modelMapper.map(reviewInDto, review);
 

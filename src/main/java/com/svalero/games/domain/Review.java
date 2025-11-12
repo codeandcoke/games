@@ -25,6 +25,10 @@ public class Review {
     private String description;
     @Column
     private boolean recommendation;
+    @Column
+    private double latitude;
+    @Column
+    private double longitude;
 
     @ManyToOne
     @JoinColumn(name = "game_id")
