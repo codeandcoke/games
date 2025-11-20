@@ -1,6 +1,7 @@
 package com.svalero.games.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,7 @@ public class Review {
     @Column(name = "play_date")
     private LocalDate playDate;
     @Column
+    @NotNull
     private int rate;
     @Column
     private String description;

@@ -42,6 +42,11 @@ public class ReviewService {
         return reviewRepository.findAll();
     }
 
+    public List<Review> findByGame(GameDto gameDto) {
+        Game game = modelMapper.map(gameDto, Game.class);
+        return reviewRepository.findByGame(game);
+    }
+
     public Review findById(long id) throws ReviewNotFoundException {
         return null;
     }
