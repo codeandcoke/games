@@ -33,8 +33,8 @@ public class GameServiceTests {
     @Test
     public void testFindAll() {
         List<Game> mockGameList = List.of(
-                new Game(1, "7 Days to die", "Survival game", "shooter", LocalDate.now(), 100, "survival", null),
-                new Game(2, "FIFA 2025", "Football game", "sport", LocalDate.now(), 60, "sports", null)
+                new Game(1, "7 Days to die", "Survival game", "shooter", LocalDate.now(), 100, "survival", null, null),
+                new Game(2, "FIFA 2025", "Football game", "sport", LocalDate.now(), 60, "sports", null, null)
         );
         List<GameOutDto> modelMapperOut = List.of(
                 new GameOutDto(1, "7 Days to die", "Survival game", "shooter", "survival"),
@@ -56,9 +56,9 @@ public class GameServiceTests {
     @Test
     public void testFindAllByCategory() {
         List<Game> mockGameList = List.of(
-                new Game(1, "7 Days to die", "Survival game", "shooter", LocalDate.now(), 100, "survival", null),
-                new Game(2, "FIFA 2025", "Football game", "sport", LocalDate.now(), 60, "sports", null),
-                new Game(3, "FIFA 2026", "Football game", "sport", LocalDate.now(), 60, "sports", null)
+                new Game(1, "7 Days to die", "Survival game", "shooter", LocalDate.now(), 100, "survival", null, null),
+                new Game(2, "FIFA 2025", "Football game", "sport", LocalDate.now(), 60, "sports", null, null),
+                new Game(3, "FIFA 2026", "Football game", "sport", LocalDate.now(), 60, "sports", null, null)
         );
         List<GameOutDto> mockModelMapperOut = List.of(
                 new GameOutDto(2, "FIFA 2025", "Football game", "sport", "sports"),

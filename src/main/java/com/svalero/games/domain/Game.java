@@ -1,6 +1,7 @@
 package com.svalero.games.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -27,12 +28,15 @@ public class Game {
     @Column
     private String type;
     @Column(name = "release_date")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate releaseDate;
     @Column
     @Min(value=0, message="the price must be a positive number")
     private float price;
     @Column
     private String category;
+    @Column
+    private String comments;
 
     @OneToMany(mappedBy = "game")
     @JsonBackReference
