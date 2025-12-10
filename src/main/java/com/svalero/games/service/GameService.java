@@ -37,7 +37,7 @@ public class GameService {
         List<Game> games;
 
         if (!category.isEmpty()) {
-            games = gameRepository.findByCategory(category);
+            games = gameRepository.findByCategoryOrderByNameDesc(category);
         } else {
             games = gameRepository.findAll();
         }
