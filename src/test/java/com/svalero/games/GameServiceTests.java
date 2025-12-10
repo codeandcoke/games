@@ -50,7 +50,7 @@ public class GameServiceTests {
         assertEquals("FIFA 2025", actualGameList.getLast().getName());
 
         verify(gameRepository, times(1)).findAll();
-        verify(gameRepository, times(0)).findByCategory("");
+        verify(gameRepository, times(0)).findByCategoryOrderByNameDesc("");
     }
 
     @Test
@@ -65,7 +65,7 @@ public class GameServiceTests {
                 new GameOutDto(3, "FIFA 2026", "Football game", "sport", "sports")
         );
 
-        when(gameRepository.findByCategory("sports")).thenReturn(mockGameList);
+        when(gameRepository.findByCategoryOrderByNameDesc("sports")).thenReturn(mockGameList);
         when(modelMapper.map(mockGameList, new TypeToken<List<GameOutDto>>() {}.getType())).thenReturn(mockModelMapperOut);
 
         List<GameOutDto> actualGameList = gameService.findAll("sports");
@@ -74,6 +74,6 @@ public class GameServiceTests {
         assertEquals("FIFA 2026", actualGameList.getLast().getName());
 
         verify(gameRepository, times(0)).findAll();
-        verify(gameRepository, times(1)).findByCategory("sports");
+        verify(gameRepository, times(1)).findByCategoryOrderByNameDesc("sports");
     }
 }
