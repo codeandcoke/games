@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
+      - run: mvn package
       - run: docker build . -t games-api
       - run: docker compose up -d
       - run: sleep 3
