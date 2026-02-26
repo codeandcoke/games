@@ -1,0 +1,19 @@
+name: Newman Run
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  newman:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - run: docker build . -t games-api
+      - run: docker compose up -d
+      - run: sleep 3
+      - uses: matt-ball/newman-action@master
+        with:
+          collection: games.postman_collection.json
+          environment: local.postman_environment.json

@@ -1,0 +1,48 @@
+version: "3.4"
+name: games-db
+services:
+  mariadb:
+    image: mariadb:11.2.6
+    container_name: games-db
+    restart: always
+    environment:
+      MYSQL_USER: test_user
+      MYSQL_PASSWORD: test_password
+      MYSQL_DATABASE: test_database
+      MYSQL_PORT: 3306
+      MYSQL_ROOT_PASSWORD: test_root_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: [ CMD, healthcheck.sh, --connect, --innodb_initialized ]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+    networks:
+      - network-apicars
+  app:
+    image: games-api
+    container_name: games-api
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_APPLICATION_JSON: '{
+               "spring.datasource.url" : "jdbc:mariadb://games-db:3306/test_database",
+               "spring.datasource.username" : "test_user",
+               "spring.datasource.password" : "test_password",
+               "spring.datasource.driverClassName" : "org.mariadb.jdbc.Driver",
+               "spring.jpa.database-platform-dialect" : "org.hibernate.dialect.MariaDBDialect",
+               "spring.jpa.hibernate.ddl-auto" : "update",
+               "server.port" : "8080"
+             }'
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    restart: on-failure
+    networks:
+      - network-apicars
+networks:
+  network-apicars:
+    driver: bridge
