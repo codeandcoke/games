@@ -18,7 +18,5 @@ jobs:
       - run: docker build . -t games-api
       - run: docker compose up -d
       - run: sleep 3
-      - uses: matt-ball/newman-action@master
-        with:
-          collection: games.postman_collection.json
-          environment: local.postman_environment.json
+      - run: npm install -g newman
+      - run: newman -e games.postman_collection.json -e local.postman_environment.json
