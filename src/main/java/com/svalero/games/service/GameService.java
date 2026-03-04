@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Service
 public class GameService {
@@ -24,6 +25,18 @@ public class GameService {
 
     public Game add(Game game) {
         return gameRepository.save(game);
+    }
+
+    public List<Game> getGames(String name, String description, String address) {
+        List<Game> allGames = gameRepository.findAll();
+
+        Stream<Game> gameStream = allGames.stream();
+        if (name != null)
+            gameStream = gameStream.filter(i -> i.getName().equalsIgnoreCase(name));
+        if (description != null)
+            gameStream = gameStream.filter(i -> i.getDescription().equalsIgnoreCase(description));
+
+        return gameStream.toList();
     }
 
     public void delete(long id) throws GameNotFoundException {
