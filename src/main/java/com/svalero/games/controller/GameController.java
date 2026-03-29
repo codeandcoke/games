@@ -1,6 +1,7 @@
 package com.svalero.games.controller;
 
 import com.svalero.games.domain.Game;
+import com.svalero.games.domain.GameV2;
 import com.svalero.games.dto.GameDto;
 import com.svalero.games.dto.GameOutDto;
 import com.svalero.games.exception.ErrorResponse;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/api")
 public class GameController {
 
     @Autowired
@@ -27,33 +29,39 @@ public class GameController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @GetMapping("/games")
+    @GetMapping("/v1/games")
     public ResponseEntity<List<GameOutDto>> getAll(@RequestParam(value = "category", defaultValue = "") String category) {
         List<GameOutDto> gamesOutDto = gameService.findAll(category);
         return ResponseEntity.ok(gamesOutDto);
     }
 
-    @GetMapping("/games/{id}")
+    @GetMapping("/v1/games/{id}")
     public ResponseEntity<GameDto> get(@PathVariable long id) throws GameNotFoundException {
         GameDto gameDto = gameService.findById(id);
         return ResponseEntity.ok(gameDto);
     }
 
-    @PostMapping("/games")
-    public ResponseEntity<Game> addGame(@Valid @RequestBody Game game) {
-        // TODO Añadir validación
+    @PostMapping("/v1/games")
+    public ResponseEntity<Game> addGameV1(@Valid @RequestBody Game game) {
         // TODO Comprobar que no exista ya un juego con el mismo nombre
         Game newGame = gameService.add(game);
         return new ResponseEntity<>(newGame, HttpStatus.CREATED);
     }
 
-    @PutMapping("/games/{id}")
+    @PostMapping("/v2/games")
+    public ResponseEntity<GameV2> addGamev2(@Valid @RequestBody GameV2 game) {
+        // TODO Comprobar que no exista ya un juego con el mismo nombre
+        GameV2 newGame = gameService.addV2(game);
+        return new ResponseEntity<>(newGame, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/v1/games/{id}")
     public ResponseEntity<Game> modifyGame(@PathVariable long id, @RequestBody Game game) throws GameNotFoundException {
         Game newGame = gameService.modify(id, game);
         return ResponseEntity.ok(newGame);
     }
 
-    @DeleteMapping("/games/{id}")
+    @DeleteMapping("/v1/games/{id}")
     public ResponseEntity<Void> deleteGame(@PathVariable long id) throws GameNotFoundException {
         gameService.delete(id);
         return ResponseEntity.noContent().build();

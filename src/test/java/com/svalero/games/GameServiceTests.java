@@ -37,8 +37,8 @@ public class GameServiceTests {
                 new Game(2, "FIFA 2025", "Football game", "sport", LocalDate.now(), 60, "sports", null, null)
         );
         List<GameOutDto> modelMapperOut = List.of(
-                new GameOutDto(1, "7 Days to die", "Survival game", "shooter", "survival"),
-                new GameOutDto(2, "FIFA 2025", "Football game", "sport", "sports")
+                new GameOutDto(1, "7 Days to die", "Survival game", "shooter", "survival", 0),
+                new GameOutDto(2, "FIFA 2025", "Football game", "sport", "sports", 0)
         );
 
         when(gameRepository.findAll()).thenReturn(mockGameList);
@@ -61,8 +61,8 @@ public class GameServiceTests {
                 new Game(3, "FIFA 2026", "Football game", "sport", LocalDate.now(), 60, "sports", null, null)
         );
         List<GameOutDto> mockModelMapperOut = List.of(
-                new GameOutDto(2, "FIFA 2025", "Football game", "sport", "sports"),
-                new GameOutDto(3, "FIFA 2026", "Football game", "sport", "sports")
+                new GameOutDto(2, "FIFA 2025", "Football game", "sport", "sports", 0),
+                new GameOutDto(3, "FIFA 2026", "Football game", "sport", "sports", 0)
         );
 
         when(gameRepository.findByCategoryOrderByNameDesc("sports")).thenReturn(mockGameList);

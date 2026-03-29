@@ -1,10 +1,12 @@
 package com.svalero.games.service;
 
 import com.svalero.games.domain.Game;
+import com.svalero.games.domain.GameV2;
 import com.svalero.games.dto.GameDto;
 import com.svalero.games.dto.GameOutDto;
 import com.svalero.games.exception.GameNotFoundException;
 import com.svalero.games.repository.GameRepository;
+import com.svalero.games.repository.GameRepositoryV2;
 import com.svalero.games.util.DateUtil;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -21,10 +23,16 @@ public class GameService {
     @Autowired
     private GameRepository gameRepository;
     @Autowired
+    private GameRepositoryV2 gameRepositoryV2;
+    @Autowired
     private ModelMapper modelMapper;
 
     public Game add(Game game) {
         return gameRepository.save(game);
+    }
+
+    public GameV2 addV2(GameV2 game) {
+        return gameRepositoryV2.save(game);
     }
 
     public List<Game> getGames(String name, String description, String address) {

@@ -4,9 +4,9 @@ info:
   description: API sobre videojuegos
   version: 1.0.0
 servers:
-  - url: 'https://www.games.com'
+  - url: 'https://www.games.com/api'
 paths:
-  /games:
+  /v1/games:
     get:
       summary: Devuelve la lista de juegos
       description: |
@@ -46,6 +46,7 @@ paths:
     post:
       summary: Registrar un juego
       description: Registra un nuevo juego
+      deprecated: true
       requestBody:
         description: Los datos del nuevo juego
         content:
@@ -59,6 +60,41 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Game'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Conflict'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /v2/games:
+    post:
+      summary: Registrar un juego
+      description: Registra un nuevo juego
+      requestBody:
+        description: Los datos del nuevo juego
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GameInDtoV2'
+      responses:
+        '201':
+          description: Juego registrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameV2'
         '400':
           description: Bad request
           content:
@@ -96,6 +132,24 @@ components:
         releaseDate: 2020-01-12
         price: 45
         category: Survival
+    GameV2:
+      allOf:
+        - $ref: '#/components/schemas/GameInDtoV2'
+      type: object
+      properties:
+        id:
+          type: number
+          format: int64
+          description: Identificador unico del juego
+      example:
+        id: 1
+        name: 7 Days to die
+        description: Surival game
+        type: Shooter
+        releaseDate: 2020-01-12
+        price: 45
+        category: Survival
+        rate: 4
     GameInDto:
       type: object
       properties:
@@ -126,6 +180,42 @@ components:
         releaseDate: 2020-01-12
         price: 45
         category: Survival
+    GameInDtoV2:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Nombre del juego
+        description:
+          type: string
+          description: Descripción del juego
+        type:
+          type: string
+          description: Tipo de juego
+        category:
+          type: string
+          description: Categoría del juego
+        releaseDate:
+          type: string
+          format: date
+          description: Fecha de lanzamiento del juego
+        price:
+          type: number
+          format: float
+          description: Precio aproximado del juego
+        rate:
+          type: number
+          format: int32
+          description: Valoración del juego
+          required: true
+      example:
+        name: 7 Days to die
+        description: Surival game
+        type: Shooter
+        releaseDate: 2020-01-12
+        price: 45
+        category: Survival
+        rate: 4
     GameOutDto:
       type: object
       properties:

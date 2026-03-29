@@ -1,6 +1,7 @@
 package com.svalero.games.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,4 +19,5 @@ public class GameDto {
     private String category;
     private float price;
     private long daysToRelease;
+    private int rate;
 }
