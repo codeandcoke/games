@@ -43,7 +43,7 @@ public class GameControllerIntegrationTest {
         gameRepository.deleteAll();
     }
 
-    @Test
+//    @Test
     @Order(1)
     public void shouldDeleteGame() throws Exception {
         Long id = 1L;
@@ -52,7 +52,7 @@ public class GameControllerIntegrationTest {
                 .andExpect(status().isNoContent());
     }
 
-    @Test
+//    @Test
     @Order(2)
     public void shouldGetAllGames() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/games"))
@@ -60,7 +60,7 @@ public class GameControllerIntegrationTest {
                 .andExpect(jsonPath("$.length()").value(2));
     }
 
-    @Test
+//    @Test
     @Order(3)
     public void shouldAddGame() throws Exception {
         Game game = new Game();

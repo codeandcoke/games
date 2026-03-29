@@ -4,9 +4,9 @@ services:
     image: mariadb:11.3.2
     container_name: games-db
     environment:
-      MYSQL_USER: games_user
-      MYSQL_PASSWORD: games_password
-      MYSQL_DATABASE: games
+      MYSQL_USER: $MARIADB_USER
+      MYSQL_PASSWORD: $MARIADB_PASSWORD
+      MYSQL_DATABASE: $MARIADB_DATABASE
       MYSQL_PORT: 3306
       MYSQL_ROOT_PASSWORD: $MARIADB_ROOT_PASSWORD
     ports:
