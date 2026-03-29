@@ -1,10 +1,12 @@
 package com.svalero.games.service;
 
 import com.svalero.games.domain.Game;
+import com.svalero.games.domain.GameV2;
 import com.svalero.games.dto.GameDto;
 import com.svalero.games.dto.GameOutDto;
 import com.svalero.games.exception.GameNotFoundException;
 import com.svalero.games.repository.GameRepository;
+import com.svalero.games.repository.GameRepositoryV2;
 import com.svalero.games.util.DateUtil;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Service
 public class GameService {
@@ -20,10 +23,28 @@ public class GameService {
     @Autowired
     private GameRepository gameRepository;
     @Autowired
+    private GameRepositoryV2 gameRepositoryV2;
+    @Autowired
     private ModelMapper modelMapper;
 
     public Game add(Game game) {
         return gameRepository.save(game);
+    }
+
+    public GameV2 addV2(GameV2 game) {
+        return gameRepositoryV2.save(game);
+    }
+
+    public List<Game> getGames(String name, String description, String address) {
+        List<Game> allGames = gameRepository.findAll();
+
+        Stream<Game> gameStream = allGames.stream();
+        if (name != null)
+            gameStream = gameStream.filter(i -> i.getName().equalsIgnoreCase(name));
+        if (description != null)
+            gameStream = gameStream.filter(i -> i.getDescription().equalsIgnoreCase(description));
+
+        return gameStream.toList();
     }
 
     public void delete(long id) throws GameNotFoundException {

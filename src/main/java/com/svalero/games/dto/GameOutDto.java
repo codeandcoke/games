@@ -13,4 +13,5 @@ public class GameOutDto {
     private String description;
     private String type;
     private String category;
+    private int rate;
 }

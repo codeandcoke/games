@@ -40,8 +40,8 @@ public class GameControllerTests {
     @Test
     public void testGetAll() throws Exception {
         List<GameOutDto> gamesOutDto = List.of(
-                new GameOutDto(1, "7 Days to die", "Survival game", "shooter", "survival"),
-                new GameOutDto(2, "FIFA 2025", "Football game", "sport", "sports")
+                new GameOutDto(1, "7 Days to die", "Survival game", "shooter", "survival", 0),
+                new GameOutDto(2, "FIFA 2025", "Football game", "sport", "sports", 0)
         );
 
         when(gameService.findAll("")).thenReturn(gamesOutDto);
@@ -62,8 +62,8 @@ public class GameControllerTests {
     @Test
     public void testGetAllByCategory() throws Exception {
         List<GameOutDto> gamesOutDto = List.of(
-                new GameOutDto(2, "FIFA 2025", "Football game", "sport", "sports"),
-                new GameOutDto(3, "FIFA 2026", "Football game", "sport", "sports")
+                new GameOutDto(2, "FIFA 2025", "Football game", "sport", "sports", 0),
+                new GameOutDto(3, "FIFA 2026", "Football game", "sport", "sports", 0)
         );
 
         when(gameService.findAll("sports")).thenReturn(gamesOutDto);
