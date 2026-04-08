@@ -1,4 +1,4 @@
-name: Integration tests with Newman
+name: Publish docker image
 
 on:
   push:
